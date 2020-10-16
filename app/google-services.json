@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "128948531097",
+    "firebase_url": "https://siempre-seguras-agcvim.firebaseio.com",
+    "project_id": "siempre-seguras-agcvim",
+    "storage_bucket": "siempre-seguras-agcvim.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128948531097:android:a20708e2d605edc611ed08",
+        "android_client_info": {
+          "package_name": "com.example.siempresegurasagcvim"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128948531097-i6l76g5bomk6cdt88sdlnvp7pl63maa1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKFdg9sJQapcqQzQGgoedxXgkeJEF3Sug"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128948531097-i6l76g5bomk6cdt88sdlnvp7pl63maa1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
