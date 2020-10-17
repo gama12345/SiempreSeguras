@@ -16,14 +16,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,22 +83,35 @@ public class NuevoRegistroActivity extends AppCompatActivity {
                                 usuario.put("municipio", municipio.getSelectedItem().toString());
                                 usuario.put("correo", correo.getText().toString());
                                 usuario.put("contraseña", contraseña.getText().toString());
-                                //Guardando en base de datos
-                                db.collection("usuarios").add(usuario)
-                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                            @Override
-                                            public void onSuccess(DocumentReference documentReference) {
-                                                Toast.makeText(view.getContext(), "Registro éxitoso", Toast.LENGTH_LONG).show();
-                                                Intent cancelarRegistro = new Intent(NuevoRegistroActivity.this, MainActivity.class);
-                                                NuevoRegistroActivity.this.startActivity(cancelarRegistro);
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(view.getContext(), "Ha ocurrido un error al guardar registro - Base de datos", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
+                                //Comprobando email único
+                                db.collection("usuarios").whereEqualTo("correo", correo.getText().toString())
+                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                        if(task.getResult().isEmpty()){
+                                            //Guardando en base de datos
+                                            db.collection("usuarios").add(usuario)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        Toast.makeText(view.getContext(), "Registro éxitoso", Toast.LENGTH_LONG).show();
+                                                        Intent cancelarRegistro = new Intent(NuevoRegistroActivity.this, MainActivity.class);
+                                                        cancelarRegistro.setFlags(cancelarRegistro.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                                        NuevoRegistroActivity.this.startActivity(cancelarRegistro);
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(view.getContext(), "Ha ocurrido un error al guardar registro - Base de datos", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                        }else{
+                                            Snackbar.make(view, "Email ya registrado, por favor ingrese uno diferente", Snackbar.LENGTH_LONG)
+                                                    .setAction("Error", null).show();
+                                        }
+                                    }
+                                });
                             }else{
                                 Snackbar.make(view, "La contraseña debe contener al menos un caracter especial, número y mayúscula", Snackbar.LENGTH_LONG)
                                         .setAction("Error", null).show();
@@ -124,6 +138,7 @@ public class NuevoRegistroActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             Intent cancelarRegistro = new Intent(NuevoRegistroActivity.this, MainActivity.class);
+            cancelarRegistro.setFlags(cancelarRegistro.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             NuevoRegistroActivity.this.startActivity(cancelarRegistro);
         }
     };
