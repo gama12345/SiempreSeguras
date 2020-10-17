@@ -1,3 +1,86 @@
 <resources>
     <string name="app_name">Siempre seguras AGCVIM</string>
+    <string-array name="lista_municipios">
+        <item>Acapulco de Juárez</item>
+        <item>Acatepec</item>
+        <item>Ahuacuotzingo</item>
+        <item>Ajuchitlán del Progreso</item>
+        <item>Alcozauca de Guerrero</item>
+        <item>Alpoyeca</item>
+        <item>Apaxtla</item>
+        <item>Arcelia</item>
+        <item>Atenango del Río</item>
+        <item>Atlamajalcingo del Monte</item>
+        <item>Atlixtac</item>
+        <item>Atoyac de Álvarez</item>
+        <item>Ayutla de los Libres</item>
+        <item>Azoyú</item>
+        <item>Benito Juárez</item>
+        <item>Buenavista de Cuéllar</item>
+        <item>Chilapa de Álvarez</item>
+        <item>Chilpancingo de los Bravo</item>
+        <item>Coahuayutla de José María Izazaga</item>
+        <item>Cochoapa el Grande</item>
+        <item>Cocula</item>
+        <item>Copala</item>
+        <item>Copalillo</item>
+        <item>Copanatoyac</item>
+        <item>Coyuca de Benítez</item>
+        <item>Coyuca de Catalán</item>
+        <item>Cuajinicuilapa</item>
+        <item>Cualác</item>
+        <item>Cuautepec</item>
+        <item>Cuetzala del Progreso</item>
+        <item>Cutzamala de Pinzón</item>
+        <item>Eduardo Neri</item>
+        <item>Florencio Villarreal</item>
+        <item>General Canuto A. Neri</item>
+        <item>General Heliodoro Castillo</item>
+        <item>Huamuxtitlán</item>
+        <item>Huitzuco de los Figueroa</item>
+        <item>Iguala de la Independencia</item>
+        <item>Igualapa</item>
+        <item>Iliatenco</item>
+        <item>Ixcateopan de Cuauhtémoc</item>
+        <item>José Joaquín de Herrera</item>
+        <item>Juan R. Escudero</item>
+        <item>Juchitán</item>
+        <item>Leonardo Bravo</item>
+        <item>Malinaltepec</item>
+        <item>Mártir de Cuilapan</item>
+        <item>Marquelia</item>
+        <item>Metlatónoc</item>
+        <item>Mochitlán</item>
+        <item>Olinalá</item>
+        <item>Ometepec</item>
+        <item>Pedro Ascencio Alquisiras</item>
+        <item>Petatlán</item>
+        <item>Pilcaya</item>
+        <item>Pungarabato</item>
+        <item>Quechultenango</item>
+        <item>San Luis Acatlán</item>
+        <item>San Marcos</item>
+        <item>San Miguel Totolapan</item>
+        <item>Taxco de Alarcón</item>
+        <item>Tecoanapa</item>
+        <item>Técpan de Galeana</item>
+        <item>Teloloapan</item>
+        <item>Tepecoacuilco de Trujano</item>
+        <item>Tetipac</item>
+        <item>Tixtla de Guerrero</item>
+        <item>Tlacoachistlahuaca</item>
+        <item>Tlacoapa</item>
+        <item>Tlalchapa</item>
+        <item>Tlalixtaquilla de Maldonado</item>
+        <item>Tlapa de Comonfort</item>
+        <item>Tlapehuala</item>
+        <item>La Unión de Isidoro Montes de Oca</item>
+        <item>Xalpatláhuac</item>
+        <item>Xochihuehuetlán</item>
+        <item>Xochistlahuaca</item>
+        <item>Zapotitlán Tablas</item>
+        <item>Zihuatanejo de Azueta</item>
+        <item>Zirándaro</item>
+        <item>Zitlala</item>
+    </string-array>
 </resources>

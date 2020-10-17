@@ -35,9 +35,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:ems="10"
+                android:hint="Nombre..."
                 android:inputType="textPersonName"
-                android:text="Nombre..."
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/p_apellido"
@@ -45,9 +45,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:ems="10"
+                android:hint="Primer apellido..."
                 android:inputType="textPersonName"
-                android:text="Primer apellido..."
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/s_apellido"
@@ -55,9 +55,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:ems="10"
+                android:hint="Segundo apellido..."
                 android:inputType="textPersonName"
-                android:text="Segundo apellido..."
-                android:textSize="20sp" />
+                android:textSize="18sp" />
 
             <EditText
                 android:id="@+id/fecha_nac"
@@ -65,36 +65,47 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:ems="10"
+                android:focusable="false"
+                android:hint="Fecha de nacimiento..."
                 android:inputType="date" />
 
             <Spinner
                 android:id="@+id/municipio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp" />
+                android:layout_marginBottom="20dp" />
 
             <EditText
                 android:id="@+id/correo_registro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
                 android:ems="10"
-                android:inputType="textEmailAddress"
-                android:text="Correo electrónico" />
+                android:hint="Correo electrónico..."
+                android:inputType="textEmailAddress" />
 
             <EditText
                 android:id="@+id/contraseña_registro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
                 android:ems="10"
-                android:inputType="textPassword"
-                android:text="Contraseña" />
+                android:hint="Contraseña..."
+                android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/btn_registrar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="10dp"
                 android:text="Listo" />
+
+            <Button
+                android:id="@+id/btn_cancelar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:text="Cancelar" />
 
         </LinearLayout>
     </ScrollView>
