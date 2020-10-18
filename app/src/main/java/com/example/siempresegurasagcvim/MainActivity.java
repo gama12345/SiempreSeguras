@@ -2,7 +2,6 @@ package com.example.siempresegurasagcvim;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.DialogFragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -30,13 +29,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         //Inicio
         db = FirebaseFirestore.getInstance();
-        configurarEnlaceRegistro();
+        configurarEnlaces();
         configurarInicioSesion();
     }
 
-    public void configurarEnlaceRegistro(){
+    public void configurarEnlaces(){
         TextView link =findViewById(R.id.link_registro);
         link.setOnClickListener(irRegistro);
+        link =findViewById(R.id.link_recuperarContraseña);
+        link.setOnClickListener(irRecuperarContraseña);
     }
     View.OnClickListener irRegistro = new View.OnClickListener() {
         @Override
@@ -44,6 +45,14 @@ public class MainActivity extends AppCompatActivity {
             Intent mostrarRegistro = new Intent(MainActivity.this, NuevoRegistroActivity.class);
             mostrarRegistro.setFlags(mostrarRegistro.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
             MainActivity.this.startActivity(mostrarRegistro);
+        }
+    };
+    View.OnClickListener irRecuperarContraseña = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent mostrarRecuperar = new Intent(MainActivity.this, RecuperarContrasena.class);
+            mostrarRecuperar.setFlags(mostrarRecuperar.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+            MainActivity.this.startActivity(mostrarRecuperar);
         }
     };
 

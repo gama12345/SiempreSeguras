@@ -17,16 +17,6 @@
             android:orientation="vertical">
 
             <EditText
-                android:id="@+id/email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="40dp"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="40dp"
-                android:hint="Email"
-                android:inputType="textEmailAddress" />
-
-            <EditText
                 android:id="@+id/contraseña"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,6 +27,16 @@
                 android:hint="Contraseña"
                 android:inputType="textPassword" />
 
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="40dp"
+                android:hint="Email"
+                android:inputType="textEmailAddress" />
+
             <Button
                 android:id="@+id/entrar"
                 android:layout_width="match_parent"
@@ -45,15 +45,26 @@
                 android:text="Iniciar sesión" />
 
             <TextView
+                android:id="@+id/link_recuperarContraseña"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:clickable="true"
+                android:text="¿Olvidaste tu contraseña?"
+                android:textAlignment="center"
+                android:textSize="18sp" />
+
+            <TextView
                 android:id="@+id/link_registro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="10dp"
                 android:clickable="true"
                 android:text="¿Aún no tienes cuenta? Registrate"
                 android:textAlignment="center"
                 android:textSize="18sp" />
+
         </LinearLayout>
     </ScrollView>
 
