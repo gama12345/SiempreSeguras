@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SiempreSegurasAGCVIM">
-        <activity android:name=".MenuPrincipalActivity"></activity>
+        <activity android:name=".MisDatosVisualizarModificarActivity"></activity>
+        <activity android:name=".MenuPrincipalActivity" />
         <activity android:name=".RecuperarContrasena" />
         <activity android:name=".NuevoRegistroActivity" />
         <activity android:name=".MainActivity">
