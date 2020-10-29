@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MenuPrincipalActivity">
+    <!--Barra de herramientas-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barra_de_herramientas">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/imageButton_panico"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="30dp"
+                android:minWidth="200dp"
+                android:minHeight="200dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@android:drawable/ic_popup_reminder"
+                android:background="@drawable/estilo_button_panico"
+                />
+
+            <Button
+                android:id="@+id/button_misdatos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
+                android:text="Mis datos" />
+
+            <Button
+                android:id="@+id/button_miscontactos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="30dp"
+                android:text="Mis Contactos" />
+        </LinearLayout>
+    </ScrollView>
+
+    <!--Cuerpo activity-->
+    <include
+        android:id="@+id/barra_de_herramientas"
+        layout="@layout/barra_de_herramientas"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"></include>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,7 +3,10 @@ package com.example.siempresegurasagcvim;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,8 +32,31 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
         //Inicio
         db = FirebaseFirestore.getInstance();
-        configurarEnlaces();
-        configurarInicioSesion();
+        BasedeDatosSQLite base = new BasedeDatosSQLite(MainActivity.this,"SQLite", null, 1);
+        SQLiteDatabase sqLite = base.getWritableDatabase();
+        String[] correo = {"correo"};
+        Cursor cursor = sqLite.query("usuarias", correo, null, null, null, null, null);
+
+        if(cursor.moveToFirst()) {
+            db.collection("usuarios")
+                    .whereEqualTo("correo", cursor.getString(0))
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                usuarioActual = document.getReference();
+                                Intent intent = new Intent(MainActivity.this, MenuPrincipalActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                MainActivity.this.startActivity(intent);
+                            }
+                        }
+                    });
+        }else{
+            configurarEnlaces();
+            configurarInicioSesion();
+        }
+
     }
 
     public void configurarEnlaces(){
@@ -84,6 +110,14 @@ public class MainActivity extends AppCompatActivity {
                                                     usuarioActual = document.getReference();
                                                     Snackbar.make(view, "Bienvenida " + document.get("nombre"), Snackbar.LENGTH_SHORT)
                                                             .setAction("Acceso correcto", null).show();
+                                                    BasedeDatosSQLite helper = new BasedeDatosSQLite(MainActivity.this,"SQLite", null, 1);
+                                                    SQLiteDatabase base = helper.getWritableDatabase();
+                                                    ContentValues usuaria = new ContentValues();
+                                                    usuaria.put("correo", document.get("correo").toString().toString());
+                                                    base.insert("usuarias", null, usuaria); base.close();
+                                                    Intent intent = new Intent(MainActivity.this, MenuPrincipalActivity.class);
+                                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                    MainActivity.this.startActivity(intent);
                                                 } else {
                                                     Snackbar.make(view, "Contraseña incorrecta", Snackbar.LENGTH_LONG)
                                                             .setAction("Alerta", null).show();
