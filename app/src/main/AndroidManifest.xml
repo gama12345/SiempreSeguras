@@ -9,7 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SiempreSegurasAGCVIM">
-        <activity android:name=".MisDatosVisualizarModificarActivity"></activity>
+        <activity android:name=".MisContactosTodosActivity"></activity>
+        <activity android:name=".MisContactosActivity" />
+        <activity android:name=".MisDatosVisualizarModificarActivity" />
         <activity android:name=".MenuPrincipalActivity" />
         <activity android:name=".RecuperarContrasena" />
         <activity android:name=".NuevoRegistroActivity" />
@@ -21,5 +23,7 @@
             </intent-filter>
         </activity>
     </application>
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 </manifest>

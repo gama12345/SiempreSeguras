@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/purple_500"
+    android:elevation="4dp"
+    app:titleTextColor="#FFFFFF">
+
+    <Button
+        android:id="@+id/guardar"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Guardar"
+        app:icon="@android:drawable/ic_menu_save"
+        app:iconGravity="end"
+        android:layout_gravity="end"/>
+
+</androidx.appcompat.widget.Toolbar>
+

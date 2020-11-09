@@ -25,7 +25,13 @@ public class MenuPrincipalActivity extends AppCompatActivity {
             }
         });
         Button botonMisContactos = findViewById(R.id.button_miscontactos);
-
+        botonMisContactos.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent nuevaIntent = new Intent(MenuPrincipalActivity.this, MisContactosActivity.class);
+                MenuPrincipalActivity.this.startActivity(nuevaIntent);
+            }
+        });
     }
 
     public void colocarBarra(){
