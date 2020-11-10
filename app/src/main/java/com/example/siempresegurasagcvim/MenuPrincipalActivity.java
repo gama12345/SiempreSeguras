@@ -1,12 +1,16 @@
 package com.example.siempresegurasagcvim;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -15,21 +19,27 @@ import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 public class MenuPrincipalActivity extends AppCompatActivity implements LocationListener {
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100;
+    private static final int PERMISSIONS_REQUEST_SEND_SMS = 200;
     Activity miActivity;
     LocationListener escucha = this;
     ImageButton buttonPanico;
@@ -69,8 +79,13 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         }
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSIONS_REQUEST_SEND_SMS);
+            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+        }
+
         if(!isGPSEnabled()){
-            Snackbar.make(buttonPanico, "Su GPS esta desactivado", Snackbar.LENGTH_LONG)
+            Snackbar.make(buttonPanico, "Tu GPS esta desactivado, activalo para poder enviar alertas", Snackbar.LENGTH_LONG)
                     .setAction("Error", null).show();
         }
     }
@@ -106,13 +121,38 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                 String country = address.get(0).getCountryName();
                 String postalCode = address.get(0).getPostalCode();
                 String knownName = address.get(0).getFeatureName();
-                String coordinates = "Latitud: "+address.get(0).getLatitude()+"\n"+"Longitud: "+address.get(0).getLongitude();
+                String latitud = address.get(0).getLatitude()+"";
+                String longitud = address.get(0).getLongitude()+"";
                 SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
                 String hora = sdf.format(new Date());
-                Toast.makeText(miActivity, coordinates, Toast.LENGTH_LONG).show();
+
+                MainActivity.usuarioActual.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        String smsMessage = task.getResult().get("nombre")+" "+task.getResult().get("primer_apellido")+" "+task.getResult().get("segundo_apellido")+" ha activado una alerta\n"+
+                                "Dirección: "+direccion+"\nLatitud: "+latitud+"\nLongitud: "+longitud+"\nHora: "+hora+"\nVer en mapa: "+"https://www.google.com/maps/search/?api=1&query="+latitud+","+longitud;
+                        String destinationAddress;
+                        String scAddress = null;
+                        PendingIntent sentIntent = null, deliveryIntent = null;
+                        HelperSQLite helper = new HelperSQLite(MenuPrincipalActivity.this,"siempreseguras", null, 1);
+                        SQLiteDatabase bd = helper.getWritableDatabase();
+                        String[] datos = {"nombre", "telefono"};
+                        Cursor consulta = bd.query("miscontactos",datos,
+                                null, null,null,null,null);
+                        while (consulta.moveToNext()) {
+                            destinationAddress = consulta.getString(1);
+                            SmsManager smsManager = SmsManager.getDefault();
+                            smsManager.sendTextMessage
+                                    (destinationAddress, scAddress, smsMessage,
+                                            sentIntent, deliveryIntent);
+                        }
+                        Snackbar.make(buttonPanico, "Alerta emitida", Snackbar.LENGTH_LONG)
+                                .setAction("Mensaje", null).show();
+                    }
+                });
             }
         }else{
-            Snackbar.make(buttonPanico, "Su GPS esta desactivado", Snackbar.LENGTH_LONG)
+            Snackbar.make(buttonPanico, "Tu GPS esta desactivado, activalo para poder enviar alertas", Snackbar.LENGTH_LONG)
                     .setAction("Error", null).show();
         }
     }
@@ -138,7 +178,14 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // Permission is granted
             } else {
-                Snackbar.make(buttonPanico, "Debe otorgarse el permiso de Ubicacion para poder enviar las alertas", Snackbar.LENGTH_LONG)
+                Snackbar.make(buttonPanico, "Debe otorgarse el permiso de ubicacion para poder enviar las alertas", Snackbar.LENGTH_LONG)
+                        .setAction("Error", null).show();
+            }
+        }else if (requestCode == PERMISSIONS_REQUEST_SEND_SMS) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission is granted
+            } else {
+                Snackbar.make(buttonPanico, "Debe otorgarse el permiso de envio SMS para poder enviar las alertas", Snackbar.LENGTH_LONG)
                         .setAction("Error", null).show();
             }
         }
