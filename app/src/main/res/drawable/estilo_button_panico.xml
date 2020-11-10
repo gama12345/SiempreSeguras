@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
-    <solid android:color="@color/button_panico" />
-    <corners android:radius="100dp" />
-</shape>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="false" android:state_pressed="false" android:drawable="@drawable/icon_alarm">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android">
+            <solid android:color="@color/button_panico" />
+            <corners android:radius="100dp" />
+        </shape>
+    </item>
+    <item android:state_focused="true" android:state_pressed="true" android:drawable="@drawable/estilo_button_panico_onclick"></item>
+    <item android:state_focused="false" android:state_pressed="true" android:drawable="@drawable/estilo_button_panico_onclick"></item>
+</selector>
+
+
+

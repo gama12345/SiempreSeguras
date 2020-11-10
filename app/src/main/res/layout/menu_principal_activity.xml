@@ -25,13 +25,12 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp"
+                android:background="@drawable/estilo_button_panico"
+                android:backgroundTint="@color/button_panico"
                 android:minWidth="200dp"
                 android:minHeight="200dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:srcCompat="@android:drawable/ic_popup_reminder"
-                android:background="@drawable/estilo_button_panico"
-                />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <Button
                 android:id="@+id/button_misdatos"
