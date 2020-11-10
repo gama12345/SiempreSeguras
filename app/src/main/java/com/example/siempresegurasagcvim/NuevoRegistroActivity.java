@@ -66,58 +66,66 @@ public class NuevoRegistroActivity extends AppCompatActivity {
             EditText s_apellido = findViewById(R.id.s_apellido);
             EditText fechaNac = findViewById(R.id.fecha_nac);
             Spinner municipio = findViewById(R.id.municipio);
+            EditText tel = findViewById(R.id.telefono_registro);
             EditText correo = findViewById(R.id.correo_registro);
             EditText contraseña = findViewById(R.id.contraseña_registro);
 
             if(elementoNombreValido(nombre.getText().toString())){
                 if(elementoNombreValido(p_apellido.getText().toString())){
                     if(elementoNombreValido(s_apellido.getText().toString())){
-                        if(emailValido(correo.getText().toString())){
-                            if(contraseñaValida(contraseña.getText().toString())){
-                                //Creando el nuevo usuario
-                                Map<String, Object> usuario = new HashMap<>();
-                                usuario.put("nombre",nombre.getText().toString());
-                                usuario.put("primer_apellido", p_apellido.getText().toString());
-                                usuario.put("segundo_apellido", s_apellido.getText().toString());
-                                usuario.put("fechaNac", fechaNac.getText().toString());
-                                usuario.put("municipio", municipio.getSelectedItem().toString());
-                                usuario.put("correo", correo.getText().toString());
-                                usuario.put("contraseña", contraseña.getText().toString());
-                                //Comprobando email único
-                                db.collection("usuarios").whereEqualTo("correo", correo.getText().toString())
-                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if(task.getResult().isEmpty()){
-                                            //Guardando en base de datos
-                                            db.collection("usuarios").add(usuario)
-                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                    @Override
-                                                    public void onSuccess(DocumentReference documentReference) {
-                                                        Toast.makeText(view.getContext(), "Registro éxitoso", Toast.LENGTH_LONG).show();
-                                                        Intent cancelarRegistro = new Intent(NuevoRegistroActivity.this, MainActivity.class);
-                                                        cancelarRegistro.setFlags(cancelarRegistro.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                                        NuevoRegistroActivity.this.startActivity(cancelarRegistro);
-                                                    }
-                                                })
-                                                .addOnFailureListener(new OnFailureListener() {
-                                                    @Override
-                                                    public void onFailure(@NonNull Exception e) {
-                                                        Toast.makeText(view.getContext(), "Ha ocurrido un error al guardar registro - Base de datos", Toast.LENGTH_LONG).show();
-                                                    }
-                                                });
-                                        }else{
-                                            Snackbar.make(view, "Email ya registrado, por favor ingrese uno diferente", Snackbar.LENGTH_LONG)
-                                                    .setAction("Error", null).show();
+                        if(!tel.getText().toString().trim().equals("")) {
+                            if (emailValido(correo.getText().toString())) {
+                                if (contraseñaValida(contraseña.getText().toString())) {
+                                    //Creando el nuevo usuario
+                                    Map<String, Object> usuario = new HashMap<>();
+                                    usuario.put("nombre", nombre.getText().toString());
+                                    usuario.put("primer_apellido", p_apellido.getText().toString());
+                                    usuario.put("segundo_apellido", s_apellido.getText().toString());
+                                    usuario.put("fechaNac", fechaNac.getText().toString());
+                                    usuario.put("municipio", municipio.getSelectedItem().toString());
+                                    usuario.put("telefono", tel.getText().toString());
+                                    usuario.put("correo", correo.getText().toString());
+                                    usuario.put("contraseña", contraseña.getText().toString());
+                                    usuario.put("token", "");
+                                    //Comprobando email único
+                                    db.collection("usuarios").whereEqualTo("correo", correo.getText().toString())
+                                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.getResult().isEmpty()) {
+                                                //Guardando en base de datos
+                                                db.collection("usuarios").add(usuario)
+                                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                            @Override
+                                                            public void onSuccess(DocumentReference documentReference) {
+                                                                Toast.makeText(view.getContext(), "Registro éxitoso", Toast.LENGTH_LONG).show();
+                                                                Intent cancelarRegistro = new Intent(NuevoRegistroActivity.this, MainActivity.class);
+                                                                cancelarRegistro.setFlags(cancelarRegistro.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                                                NuevoRegistroActivity.this.startActivity(cancelarRegistro);
+                                                            }
+                                                        })
+                                                        .addOnFailureListener(new OnFailureListener() {
+                                                            @Override
+                                                            public void onFailure(@NonNull Exception e) {
+                                                                Toast.makeText(view.getContext(), "Ha ocurrido un error al guardar registro - Base de datos", Toast.LENGTH_LONG).show();
+                                                            }
+                                                        });
+                                            } else {
+                                                Snackbar.make(view, "Email ya registrado, por favor ingrese uno diferente", Snackbar.LENGTH_LONG)
+                                                        .setAction("Error", null).show();
+                                            }
                                         }
-                                    }
-                                });
-                            }else{
-                                Snackbar.make(view, "La contraseña debe contener al menos un caracter especial, número y mayúscula", Snackbar.LENGTH_LONG)
+                                    });
+                                } else {
+                                    Snackbar.make(view, "La contraseña debe contener al menos un caracter especial, número y mayúscula", Snackbar.LENGTH_LONG)
+                                            .setAction("Error", null).show();
+                                }
+                            } else {
+                                Snackbar.make(view, "Formato de correo electrónico incorrecto", Snackbar.LENGTH_LONG)
                                         .setAction("Error", null).show();
                             }
-                        }else{
-                            Snackbar.make(view, "Formato de correo electrónico incorrecto", Snackbar.LENGTH_LONG)
+                        }else {
+                            Snackbar.make(view, "Ingrese su número de celular", Snackbar.LENGTH_LONG)
                                     .setAction("Error", null).show();
                         }
                     }else{

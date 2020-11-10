@@ -76,6 +76,15 @@
                 android:layout_marginBottom="20dp" />
 
             <EditText
+                android:id="@+id/telefono_registro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:ems="10"
+                android:hint="Celular..."
+                android:inputType="phone" />
+
+            <EditText
                 android:id="@+id/correo_registro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

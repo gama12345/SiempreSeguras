@@ -83,6 +83,8 @@ public class MisDatosVisualizarModificarActivity extends AppCompatActivity {
                 primerApellidoUsuario.setText(task.getResult().get("primer_apellido").toString());
                 EditText segundoApellidoUsuario = findViewById(R.id.editText_segundo_apellido_usuario4);
                 segundoApellidoUsuario.setText(task.getResult().get("segundo_apellido").toString());
+                EditText telUsuario = findViewById(R.id.editText_celular_usuario);
+                telUsuario.setText(task.getResult().get("telefono").toString());
                 EditText correoUsuario = findViewById(R.id.editText_correo_usuario);
                 correoUsuario.setText(task.getResult().get("correo").toString());
                 EditText contraseñaUsuario = findViewById(R.id.editText_contraseña_usuario2);
@@ -131,6 +133,7 @@ public class MisDatosVisualizarModificarActivity extends AppCompatActivity {
             EditText nombreUsuario = findViewById(R.id.editText_nombre_usuario6);
             EditText primerApellidoUsuario = findViewById(R.id.editText_primer_apellido_usuario5);
             EditText segundoApellidoUsuario = findViewById(R.id.editText_segundo_apellido_usuario4);
+            EditText telUsuario = findViewById(R.id.editText_celular_usuario);
             EditText correoUsuario = findViewById(R.id.editText_correo_usuario);
             EditText contraseñaUsuario = findViewById(R.id.editText_contraseña_usuario2);
             Spinner listaMunicipios = findViewById(R.id.spinner_municipio);
@@ -139,40 +142,46 @@ public class MisDatosVisualizarModificarActivity extends AppCompatActivity {
             if(elementoNombreValido(nombreUsuario.getText().toString())){
                 if(elementoNombreValido(primerApellidoUsuario.getText().toString())){
                     if(elementoNombreValido(segundoApellidoUsuario.getText().toString())){
-                        if(emailValido(correoUsuario.getText().toString())){
-                            if(contraseñaValida(contraseñaUsuario.getText().toString())){
-                                //Creando el nuevo usuario
-                                Map<String, Object> usuario = new HashMap<>();
-                                usuario.put("nombre",nombreUsuario.getText().toString());
-                                usuario.put("primer_apellido", primerApellidoUsuario.getText().toString());
-                                usuario.put("segundo_apellido", segundoApellidoUsuario.getText().toString());
-                                usuario.put("fechaNac", fechaNac.getText().toString());
-                                usuario.put("municipio", listaMunicipios.getSelectedItem().toString());
-                                usuario.put("correo", correoUsuario.getText().toString());
-                                usuario.put("contraseña", contraseñaUsuario.getText().toString());
-                                //Comprobando email único
-                                FirebaseFirestore.getInstance().collection("usuarios").whereEqualTo("correo", correoUsuario.getText().toString())
-                                        .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                        if(task.getResult().isEmpty() || task.getResult().getDocuments().get(0).get("correo").equals(correoUsuario.getText().toString())){
-                                            //Actualizando en base de datos
-                                            MainActivity.usuarioActual.update(usuario);
-                                            visualizarDatosUsuario();
-                                            Snackbar.make(view, "Datos actualizados", Snackbar.LENGTH_LONG)
-                                                    .setAction("Mensaje", null).show();
-                                        }else{
-                                            Snackbar.make(view, "Email ya registrado, por favor ingrese uno diferente", Snackbar.LENGTH_LONG)
-                                                    .setAction("Error", null).show();
+                        if(!telUsuario.getText().toString().trim().equals("")) {
+                            if (emailValido(correoUsuario.getText().toString())) {
+                                if (contraseñaValida(contraseñaUsuario.getText().toString())) {
+                                    //Creando el nuevo usuario
+                                    Map<String, Object> usuario = new HashMap<>();
+                                    usuario.put("nombre", nombreUsuario.getText().toString());
+                                    usuario.put("primer_apellido", primerApellidoUsuario.getText().toString());
+                                    usuario.put("segundo_apellido", segundoApellidoUsuario.getText().toString());
+                                    usuario.put("fechaNac", fechaNac.getText().toString());
+                                    usuario.put("municipio", listaMunicipios.getSelectedItem().toString());
+                                    usuario.put("telefono", telUsuario.getText().toString());
+                                    usuario.put("correo", correoUsuario.getText().toString());
+                                    usuario.put("contraseña", contraseñaUsuario.getText().toString());
+                                    //Comprobando email único
+                                    FirebaseFirestore.getInstance().collection("usuarios").whereEqualTo("correo", correoUsuario.getText().toString())
+                                            .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.getResult().isEmpty() || task.getResult().getDocuments().get(0).get("correo").equals(correoUsuario.getText().toString())) {
+                                                //Actualizando en base de datos
+                                                MainActivity.usuarioActual.update(usuario);
+                                                visualizarDatosUsuario();
+                                                Snackbar.make(view, "Datos actualizados", Snackbar.LENGTH_LONG)
+                                                        .setAction("Mensaje", null).show();
+                                            } else {
+                                                Snackbar.make(view, "Email ya registrado, por favor ingrese uno diferente", Snackbar.LENGTH_LONG)
+                                                        .setAction("Error", null).show();
+                                            }
                                         }
-                                    }
-                                });
-                            }else{
-                                Snackbar.make(view, "La contraseña debe contener al menos un caracter especial, número y mayúscula", Snackbar.LENGTH_LONG)
+                                    });
+                                } else {
+                                    Snackbar.make(view, "La contraseña debe contener al menos un caracter especial, número y mayúscula", Snackbar.LENGTH_LONG)
+                                            .setAction("Error", null).show();
+                                }
+                            } else {
+                                Snackbar.make(view, "Formato de correo electrónico incorrecto", Snackbar.LENGTH_LONG)
                                         .setAction("Error", null).show();
                             }
-                        }else{
-                            Snackbar.make(view, "Formato de correo electrónico incorrecto", Snackbar.LENGTH_LONG)
+                        }else {
+                            Snackbar.make(view, "Ingrese su número celular", Snackbar.LENGTH_LONG)
                                     .setAction("Error", null).show();
                         }
                     }else{

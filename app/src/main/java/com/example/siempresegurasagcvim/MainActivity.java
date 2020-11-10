@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public void configurarEnlaces(){
         TextView link =findViewById(R.id.link_registro);
         link.setOnClickListener(irRegistro);
-        link =findViewById(R.id.link_recuperarContraseña);
+        link = findViewById(R.id.link_recuperarContraseña);
         link.setOnClickListener(irRecuperarContraseña);
     }
     View.OnClickListener irRegistro = new View.OnClickListener() {
