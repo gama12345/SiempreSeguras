@@ -55,7 +55,7 @@
     <!--Cuerpo activity-->
     <include
         android:id="@+id/barra_de_herramientas"
-        layout="@layout/barra_de_herramientas"
+        layout="@layout/menu_principal_barra_de_herramientas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></include>
 

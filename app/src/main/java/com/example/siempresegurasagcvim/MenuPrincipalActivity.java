@@ -1,12 +1,14 @@
 package com.example.siempresegurasagcvim;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -72,6 +74,31 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
             public boolean onLongClick(View view) {
                 sendCurrentLocation();
                 return true;
+            }
+        });
+        ImageButton buttonExit = findViewById(R.id.salir);
+        buttonExit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+                builder.setMessage("¿Deseas cerrar sesión?")
+                        .setPositiveButton("Si", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                BasedeDatosSQLite base = new BasedeDatosSQLite(MenuPrincipalActivity.this,"SQLite", null, 1);
+                                SQLiteDatabase sqLite = base.getWritableDatabase();
+                                String[] args = {MainActivity.usuarioActualEmail};
+                                sqLite.delete("usuarias","correo = ?",args);
+                                Intent intent = new Intent(MenuPrincipalActivity.this, MainActivity.class);
+                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                MenuPrincipalActivity.this.startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // User cancelled the dialog
+                            }
+                        });
+                builder.create().show();
             }
         });
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

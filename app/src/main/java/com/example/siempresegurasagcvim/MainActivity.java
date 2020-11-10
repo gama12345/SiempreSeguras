@@ -3,7 +3,9 @@ package com.example.siempresegurasagcvim;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,16 +22,23 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class MainActivity extends AppCompatActivity {
+    Activity miActivity;
     FirebaseFirestore db;
     static DocumentReference usuarioActual;
+    static String usuarioActualEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+        miActivity = this;
         //Inicio
         db = FirebaseFirestore.getInstance();
         BasedeDatosSQLite base = new BasedeDatosSQLite(MainActivity.this,"SQLite", null, 1);
@@ -46,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 usuarioActual = document.getReference();
+                                usuarioActualEmail = document.get("correo").toString();
+                                getToken(document.get("correo").toString());
                                 Intent intent = new Intent(MainActivity.this, MenuPrincipalActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 MainActivity.this.startActivity(intent);
@@ -113,8 +124,9 @@ public class MainActivity extends AppCompatActivity {
                                                     BasedeDatosSQLite helper = new BasedeDatosSQLite(MainActivity.this,"SQLite", null, 1);
                                                     SQLiteDatabase base = helper.getWritableDatabase();
                                                     ContentValues usuaria = new ContentValues();
-                                                    usuaria.put("correo", document.get("correo").toString().toString());
+                                                    usuaria.put("correo", document.get("correo").toString());
                                                     base.insert("usuarias", null, usuaria); base.close();
+                                                    getToken(document.get("correo").toString());
                                                     Intent intent = new Intent(MainActivity.this, MenuPrincipalActivity.class);
                                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                     MainActivity.this.startActivity(intent);
@@ -140,4 +152,38 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+    public void getToken(String email){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                final String miToken = task.getResult();
+                FirebaseFirestore.getInstance().collection("tokens").whereEqualTo("token", miToken).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (!task.getResult().isEmpty()){
+                            task.getResult().getDocuments().get(0).getReference().delete();
+                        }
+                        Map<String, Object> registro = new HashMap<>();
+                        registro.put("token", miToken);
+                        registro.put("correo", email);
+                        FirebaseFirestore.getInstance().collection("tokens").add(registro);
+                        /*AdapterRestAPI adapterRestAPI = new AdapterRestAPI();
+                        Endpoints endpoints = adapterRestAPI.establecerConexionRestAPI();
+                        Call<DatosUsuarioRequest> respuestaCall = endpoints.registrarTokenID(miToken, email);
+                        respuestaCall.enqueue(new Callback<DatosUsuarioRequest>() {
+                            @Override
+                            public void onResponse(Call<DatosUsuarioRequest> call, Response<DatosUsuarioRequest> response) {
+                                DatosUsuarioRequest respuesta = response.body();
+                            }
+
+                            @Override
+                            public void onFailure(Call<DatosUsuarioRequest> call, Throwable t) {
+
+                            }
+                        });*/
+                    }
+                });
+            }
+        });
+    }
 }

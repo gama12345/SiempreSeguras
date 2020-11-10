@@ -35,7 +35,7 @@ public class MisContactosTodosActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.mis_contactos_todos_activity);
         colocarBarra();
-        Button btnGuardarContactos = findViewById(R.id.guardar);
+        Button btnGuardarContactos = findViewById(R.id.salir);
         btnGuardarContactos.setOnClickListener(guardarContactos);
         miActivity = this;
         LinearLayoutManager lim = new LinearLayoutManager(this);

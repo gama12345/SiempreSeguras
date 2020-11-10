@@ -86,7 +86,6 @@ public class NuevoRegistroActivity extends AppCompatActivity {
                                     usuario.put("telefono", tel.getText().toString());
                                     usuario.put("correo", correo.getText().toString());
                                     usuario.put("contraseña", contraseña.getText().toString());
-                                    usuario.put("token", "");
                                     //Comprobando email único
                                     db.collection("usuarios").whereEqualTo("correo", correo.getText().toString())
                                             .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
