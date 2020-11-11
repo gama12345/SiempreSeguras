@@ -86,31 +86,44 @@ public class NuevoRegistroActivity extends AppCompatActivity {
                                     usuario.put("telefono", tel.getText().toString());
                                     usuario.put("correo", correo.getText().toString());
                                     usuario.put("contraseña", contraseña.getText().toString());
+                                    usuario.put("ayudante", "false");
+                                    usuario.put("fotoAlertas", "false");
                                     //Comprobando email único
                                     db.collection("usuarios").whereEqualTo("correo", correo.getText().toString())
                                             .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                         @Override
                                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                             if (task.getResult().isEmpty()) {
-                                                //Guardando en base de datos
-                                                db.collection("usuarios").add(usuario)
-                                                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                            @Override
-                                                            public void onSuccess(DocumentReference documentReference) {
-                                                                Toast.makeText(view.getContext(), "Registro éxitoso", Toast.LENGTH_LONG).show();
-                                                                Intent cancelarRegistro = new Intent(NuevoRegistroActivity.this, MainActivity.class);
-                                                                cancelarRegistro.setFlags(cancelarRegistro.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
-                                                                NuevoRegistroActivity.this.startActivity(cancelarRegistro);
-                                                            }
-                                                        })
-                                                        .addOnFailureListener(new OnFailureListener() {
-                                                            @Override
-                                                            public void onFailure(@NonNull Exception e) {
-                                                                Toast.makeText(view.getContext(), "Ha ocurrido un error al guardar registro - Base de datos", Toast.LENGTH_LONG).show();
-                                                            }
-                                                        });
+                                                db.collection("usuarios").whereEqualTo("telefono", tel.getText().toString()).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                                    @Override
+                                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                                        if (task.getResult().isEmpty()) {
+                                                            //Guardando en base de datos
+                                                            db.collection("usuarios").add(usuario)
+                                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                        @Override
+                                                                        public void onSuccess(DocumentReference documentReference) {
+                                                                            Toast.makeText(view.getContext(), "Registro éxitoso", Toast.LENGTH_LONG).show();
+                                                                            Intent cancelarRegistro = new Intent(NuevoRegistroActivity.this, MainActivity.class);
+                                                                            cancelarRegistro.setFlags(cancelarRegistro.getFlags() | Intent.FLAG_ACTIVITY_NO_HISTORY);
+                                                                            NuevoRegistroActivity.this.startActivity(cancelarRegistro);
+                                                                        }
+                                                                    })
+                                                                    .addOnFailureListener(new OnFailureListener() {
+                                                                        @Override
+                                                                        public void onFailure(@NonNull Exception e) {
+                                                                            Toast.makeText(view.getContext(), "Ha ocurrido un error al guardar registro - Base de datos", Toast.LENGTH_LONG).show();
+                                                                        }
+                                                                    });
+                                                        }else{
+                                                            Snackbar.make(view, "Telefono no valido, por favor ingrese uno diferente", Snackbar.LENGTH_LONG)
+                                                                    .setAction("Error", null).show();
+                                                        }
+
+                                                    }
+                                                });
                                             } else {
-                                                Snackbar.make(view, "Email ya registrado, por favor ingrese uno diferente", Snackbar.LENGTH_LONG)
+                                                Snackbar.make(view, "Email no valido, por favor ingrese uno diferente", Snackbar.LENGTH_LONG)
                                                         .setAction("Error", null).show();
                                             }
                                         }
