@@ -91,7 +91,7 @@ public class MisContactosActivity extends AppCompatActivity {
         while (consulta.moveToNext()) {
             misContactos.add(new Contacto(consulta.getString(0), consulta.getString(1), true));
         }
-        AdaptadorEmergencias adaptador = new AdaptadorEmergencias(misContactos, miActivity);
+        AdaptadorTodos adaptador = new AdaptadorTodos(misContactos, miActivity);
         recyclerView.setAdapter(adaptador);
     }
 

@@ -89,6 +89,14 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                 MenuPrincipalActivity.this.startActivity(nuevaIntent);
             }
         });
+        Button botonAlertas = findViewById(R.id.button_misalertas);
+        botonAlertas.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent nuevaIntent = new Intent(MenuPrincipalActivity.this, AlertasActivity.class);
+                MenuPrincipalActivity.this.startActivity(nuevaIntent);
+            }
+        });
         Button botonMisContactos = findViewById(R.id.button_miscontactos);
         botonMisContactos.setOnClickListener(new View.OnClickListener(){
             @Override
