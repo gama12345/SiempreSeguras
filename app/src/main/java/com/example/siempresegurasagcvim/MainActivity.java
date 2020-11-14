@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 usuarioActual = document.getReference();
                                 usuarioActualEmail = document.get("correo").toString();
-                                getToken(document.get("correo").toString());
+                                getToken(document.get("correo").toString(), document.get("telefono").toString());
                                 Intent intent = new Intent(MainActivity.this, MenuPrincipalActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                 MainActivity.this.startActivity(intent);
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
                                                     ContentValues usuaria = new ContentValues();
                                                     usuaria.put("correo", document.get("correo").toString());
                                                     base.insert("usuarias", null, usuaria); base.close();
-                                                    getToken(document.get("correo").toString());
+                                                    getToken(document.get("correo").toString(), document.get("telefono").toString());
                                                     Intent intent = new Intent(MainActivity.this, MenuPrincipalActivity.class);
                                                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                                                     MainActivity.this.startActivity(intent);
@@ -152,35 +152,15 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-    public void getToken(String email){
+    public void getToken(String email, String tel){
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
             @Override
             public void onComplete(@NonNull Task<String> task) {
                 final String miToken = task.getResult();
-                FirebaseFirestore.getInstance().collection("tokens").whereEqualTo("token", miToken).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                FirebaseFirestore.getInstance().collection("usuarios").whereEqualTo("correo", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (!task.getResult().isEmpty()){
-                            task.getResult().getDocuments().get(0).getReference().delete();
-                        }
-                        Map<String, Object> registro = new HashMap<>();
-                        registro.put("token", miToken);
-                        registro.put("correo", email);
-                        FirebaseFirestore.getInstance().collection("tokens").add(registro);
-                        /*AdapterRestAPI adapterRestAPI = new AdapterRestAPI();
-                        Endpoints endpoints = adapterRestAPI.establecerConexionRestAPI();
-                        Call<DatosUsuarioRequest> respuestaCall = endpoints.registrarTokenID(miToken, email);
-                        respuestaCall.enqueue(new Callback<DatosUsuarioRequest>() {
-                            @Override
-                            public void onResponse(Call<DatosUsuarioRequest> call, Response<DatosUsuarioRequest> response) {
-                                DatosUsuarioRequest respuesta = response.body();
-                            }
-
-                            @Override
-                            public void onFailure(Call<DatosUsuarioRequest> call, Throwable t) {
-
-                            }
-                        });*/
+                        task.getResult().getDocuments().get(0).getReference().update("token", miToken);
                     }
                 });
             }

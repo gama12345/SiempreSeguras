@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.camera.core.ImageCapture;
 import androidx.core.content.FileProvider;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import android.Manifest;
 import android.app.Activity;
@@ -47,6 +50,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -251,14 +255,17 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                             Cursor consulta = bd.query("miscontactos", datos,
                                     null, null, null, null, null);
                             ArrayList<String> numeros = new ArrayList<>();
+                            ArrayList<String> numeros2 = new ArrayList<>();
                             while (consulta.moveToNext()) {
                                 numeros.add(consulta.getString(1));
+                                numeros2.add(consulta.getString(1));
                                 destinationAddress = consulta.getString(1);
                                 SmsManager smsManager = SmsManager.getDefault();
                                 smsManager.sendTextMessage
                                         (destinationAddress, scAddress, smsMessage,
                                                 sentIntent, deliveryIntent);
                             }
+                            enviarNotificaciones(numeros2);
                             guardarAlertas(numeros, smsMessage, MainActivity.usuarioActualEmail,"");
                             Snackbar.make(buttonPanico, "Alerta emitida", Snackbar.LENGTH_LONG)
                                     .setAction("Mensaje", null).show();
@@ -288,6 +295,39 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                 }
             }
         });
+    }
+    public void enviarNotificaciones(ArrayList<String> numContactosT){
+        if(numContactosT.size() > 0) {
+            FirebaseFirestore.getInstance().collection("usuarios").whereEqualTo("telefono", numContactosT.get(0)).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (!task.getResult().isEmpty()) {
+                        if (task.getResult().getDocuments().get(0).get("ayudante").toString().equals("true")) {
+                            AdapterNotifications adapterRestAPI = new AdapterNotifications();
+                            PuntosConexion endpoints = adapterRestAPI.startAdapter();
+                            Call<SolicitudNotificacion> usuarioResponseCall = endpoints.enviarNotificacion(task.getResult().getDocuments().get(0).get("token").toString());
+                            usuarioResponseCall.enqueue(new Callback<SolicitudNotificacion>() {
+                                @Override
+                                public void onResponse(Call<SolicitudNotificacion> call, Response<SolicitudNotificacion> response) {
+                                    SolicitudNotificacion respuesta = response.body();
+                                    Log.d("TG: ", response.toString());
+                                }
+
+                                @Override
+                                public void onFailure(Call<SolicitudNotificacion> call, Throwable t) {
+                                    Log.d("T: ", t.toString());
+
+                                }
+                            });
+                        }
+                    }
+                    numContactosT.remove(0);
+                    if(numContactosT.size() > 0) {
+                        enviarNotificaciones(numContactosT);
+                    }
+                }
+            });
+        }
     }
 
     private File createImageFile() throws IOException {
@@ -394,14 +434,17 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                     Cursor consulta = bd.query("miscontactos", datos,
                             null, null, null, null, null);
                     ArrayList<String> numeros = new ArrayList<>();
+                    ArrayList<String> numeros2 = new ArrayList<>();
                     while (consulta.moveToNext()) {
                         numeros.add(consulta.getString(1));
+                        numeros2.add(consulta.getString(1));
                         destinationAddress = consulta.getString(1);
                         SmsManager smsManager = SmsManager.getDefault();
                         smsManager.sendTextMessage
                                 (destinationAddress, scAddress, smsMessage,
                                         sentIntent, deliveryIntent);
                     }
+                    enviarNotificaciones(numeros2);
                     guardarAlertas(numeros, smsMessage, MainActivity.usuarioActualEmail ,f.getName());
                     Snackbar.make(buttonPanico, "Alerta emitida", Snackbar.LENGTH_LONG)
                             .setAction("Mensaje", null).show();
