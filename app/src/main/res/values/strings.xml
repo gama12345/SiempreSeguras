@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Siempre seguras AGCVIM</string>
+    <string name="resetp"><u>¿Olvidaste tu contraseña?</u></string>
+    <string name="registro"><u>¿Aún no tienes cuenta? Registrate</u></string>
     <string-array name="lista_municipios">
         <item>Acapulco de Juárez</item>
         <item>Acatepec</item>

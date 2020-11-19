@@ -12,24 +12,15 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginBottom="5dp"
-        android:background="#5E85C8FF"
+        android:background="@color/color_light"
         android:orientation="vertical"
         android:padding="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/white"
             android:orientation="horizontal">
-
-            <ToggleButton
-                android:id="@+id/toggleButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:checked="false"
-                android:minWidth="48dp"
-                android:textOff="No"
-                android:textOn="Si" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,9 +37,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
-                        android:minWidth="40dp"
-                        android:minHeight="40dp"
-                        app:srcCompat="@android:drawable/btn_star_big_on" />
+                        android:adjustViewBounds="true"
+                        android:maxWidth="40dp"
+                        android:maxHeight="40dp"
+                        app:srcCompat="@drawable/icon_account" />
 
                     <TextView
                         android:id="@+id/nombreContacto"
@@ -56,6 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="Contacto"
+                        android:textColor="@color/color_dark"
                         android:textSize="17sp" />
                 </LinearLayout>
 
@@ -69,9 +62,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="8dp"
-                        android:minWidth="40dp"
+                        android:adjustViewBounds="true"
+                        android:maxWidth="40dp"
                         android:minHeight="40dp"
-                        app:srcCompat="@android:drawable/ic_menu_call" />
+                        app:srcCompat="@drawable/icon_cellphone" />
 
                     <TextView
                         android:id="@+id/telefonoContacto"
@@ -79,10 +73,21 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:text="Tel"
+                        android:textColor="@color/color_dark"
                         android:textSize="17sp" />
                 </LinearLayout>
 
             </LinearLayout>
+
+            <ToggleButton
+                android:id="@+id/toggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:checked="false"
+                android:minWidth="48dp"
+                android:textOff="No"
+                android:textOn="Si" />
 
         </LinearLayout>
 

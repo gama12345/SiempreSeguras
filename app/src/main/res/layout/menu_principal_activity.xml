@@ -9,6 +9,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barra_de_herramientas">
@@ -24,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="20dp"
                 android:background="@drawable/estilo_button_panico"
                 android:backgroundTint="@color/button_panico"
                 android:minWidth="200dp"
@@ -32,32 +33,52 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
 
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginEnd="40dp"
+                android:layout_marginBottom="20dp"
+                android:text="Si te encuentras en peligro manten presionado el icono de alerta"
+                android:textAlignment="center"
+                android:textColor="@color/color_dark"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
             <Button
                 android:id="@+id/button_misdatos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
                 android:layout_marginBottom="10dp"
-                android:text="Mis datos" />
+                android:text="Mis datos"
+                android:textColor="#FFFFFF"
+                app:iconTint="#FFFFFF" />
 
             <Button
                 android:id="@+id/button_misalertas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
                 android:layout_marginBottom="10dp"
-                android:text="Mis alertas" />
+                android:text="Mis alertas"
+                android:textColor="#FFFFFF"
+                app:iconTint="#FFFFFF" />
 
             <Button
                 android:id="@+id/button_miscontactos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="30dp"
-                android:text="Mis Contactos" />
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="50dp"
+                android:text="Mis Contactos"
+                android:textColor="#FFFFFF"
+                app:iconTint="#FFFFFF" />
+
         </LinearLayout>
     </ScrollView>
 

@@ -21,7 +21,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/refresh"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barra_de_herramientas">
@@ -33,16 +35,19 @@
             android:layout_height="wrap_content"
             android:backgroundTint="@android:color/transparent"
             android:text="Agregar contactos"
-            android:textColor="#000000"
+            android:textColor="@color/color_base"
             android:textStyle="bold" />
 
         <ImageButton
             android:id="@+id/botonAgregarContactos"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="0"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
             android:background="@android:color/transparent"
-            app:srcCompat="?android:attr/listChoiceIndicatorSingle" />
+            android:maxWidth="40dp"
+            android:maxHeight="40dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/icon_addnew" />
     </LinearLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout

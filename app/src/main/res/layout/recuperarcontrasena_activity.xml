@@ -4,28 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_light"
     tools:context=".RecuperarContrasena">
 
-    <TextView
-        android:id="@+id/titulo_recuperarContraseña"
+    <ImageView
+        android:id="@+id/imageView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Recuperar contraseña"
-        android:textSize="22sp"
-        app:layout_constraintBottom_toTopOf="@id/correo_recuperarContraseña"
+        android:layout_weight="1"
+        android:background="@drawable/icon_passwordforgotten"
+        android:elevation="5dp"
+        android:minWidth="180dp"
+        android:minHeight="180dp"
+        app:layout_constraintBottom_toTopOf="@id/titulo_recuperarContraseña"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/icon_passwordforgotten" />
 
     <EditText
         android:id="@+id/correo_recuperarContraseña"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/edittext_white_background"
         android:ems="10"
         android:hint="Ingrese su email..."
         android:inputType="textEmailAddress"
+        android:padding="5dp"
+        android:textColor="#000000"
+        android:textColorHint="#A6121111"
         app:layout_constraintBottom_toTopOf="@id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,18 +56,54 @@
             android:id="@+id/btn_enviarEmail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="20dp"
             android:layout_marginRight="5dp"
             android:layout_weight="1"
-            android:text="Enviar" />
+            android:text="Enviar"
+            android:textColor="#FFFFFF" />
 
         <Button
             android:id="@+id/btn_cancelarRecuperarContraseña"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="20dp"
             android:layout_weight="1"
-            android:text="Cancelar" />
+            android:text="Cancelar"
+            android:textColor="#FFFFFF" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/titulo_recuperarContraseña"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
+        android:text="¿Olvidaste tu contraseña?"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@id/textView5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageView2" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="10dp"
+        android:text="Ingresa tu correo electrónico para que podamos enviar un recordatorio"
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/correo_recuperarContraseña"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/titulo_recuperarContraseña" />
 </androidx.constraintlayout.widget.ConstraintLayout>

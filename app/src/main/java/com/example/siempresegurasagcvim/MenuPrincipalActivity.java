@@ -69,7 +69,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class MenuPrincipalActivity extends AppCompatActivity implements LocationListener {
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100;
+    private int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100;
     private static final int PERMISSIONS_REQUEST_SEND_SMS = 200;
     private static final int PERMISSIONS_REQUEST_CAMERA = 300;
     private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 400;
@@ -150,27 +150,22 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                 builder.create().show();
             }
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
-            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSIONS_REQUEST_SEND_SMS);
-            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
-        }
 
         if(!isGPSEnabled()){
             Snackbar.make(buttonPanico, "Tu GPS esta desactivado, activalo para poder enviar alertas", Snackbar.LENGTH_LONG)
                     .setAction("Error", null).show();
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSIONS_REQUEST_SEND_SMS);
+            //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA);
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         }
@@ -362,36 +357,60 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted
-            } else {
-                Snackbar.make(buttonPanico, "Debe otorgarse el permiso de ubicacion para poder enviar las alertas", Snackbar.LENGTH_LONG)
-                        .setAction("Error", null).show();
+    public void onRequestPermissionsResult(int requestCodeP, String[] permissions, int[] grantResults) {
+        Log.d("PERMISSIOM....", ""+requestCodeP);
+            if (requestCodeP == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted
+                } else {
+                    Snackbar.make(buttonPanico, "Debe otorgarse el permiso de ubicacion para poder enviar las alertas", Snackbar.LENGTH_LONG)
+                            .setAction("Error", null).show();
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSIONS_REQUEST_SEND_SMS);
+                    //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+                }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA);
+                    //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+                }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                    //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+                }
+            } else if (requestCodeP == PERMISSIONS_REQUEST_SEND_SMS) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted
+                } else {
+                    Snackbar.make(buttonPanico, "Debe otorgarse el permiso de envio SMS para poder enviar las alertas", Snackbar.LENGTH_LONG)
+                            .setAction("Error", null).show();
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA);
+                    //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+                }else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                    //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+                }
+            } else if (requestCodeP == PERMISSIONS_REQUEST_CAMERA) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted
+                } else {
+                    Snackbar.make(buttonPanico, "Debe otorgarse el permiso de camara para poder enviar las alertas con una foto", Snackbar.LENGTH_LONG)
+                            .setAction("Error", null).show();
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                    //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
+                }
+            } else if (requestCodeP == PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Permission is granted
+                } else {
+                    Snackbar.make(buttonPanico, "Debe otorgarse el permiso de storage (almacenamiento) para poder enviar las alertas con una foto", Snackbar.LENGTH_LONG)
+                            .setAction("Error", null).show();
+                }
             }
-        }else if (requestCode == PERMISSIONS_REQUEST_SEND_SMS) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted
-            } else {
-                Snackbar.make(buttonPanico, "Debe otorgarse el permiso de envio SMS para poder enviar las alertas", Snackbar.LENGTH_LONG)
-                        .setAction("Error", null).show();
-            }
-        }else if (requestCode == PERMISSIONS_REQUEST_CAMERA) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted
-            } else {
-                Snackbar.make(buttonPanico, "Debe otorgarse el permiso de camara para poder enviar las alertas con una foto", Snackbar.LENGTH_LONG)
-                        .setAction("Error", null).show();
-            }
-        }else if (requestCode == PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE) {
-            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission is granted
-            } else {
-                Snackbar.make(buttonPanico, "Debe otorgarse el permiso de storage (almacenamiento) para poder enviar las alertas con una foto", Snackbar.LENGTH_LONG)
-                        .setAction("Error", null).show();
-            }
-        }
+
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){

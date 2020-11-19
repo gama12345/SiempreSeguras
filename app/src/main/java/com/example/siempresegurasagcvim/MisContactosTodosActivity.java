@@ -111,6 +111,9 @@ public class MisContactosTodosActivity extends AppCompatActivity {
                 recuperarContactos();
             } else {
                 Toast.makeText(this, "Debe otorgarse el permiso para poder mostrar los contactos", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(MisContactosTodosActivity.this, MisContactosActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                MisContactosTodosActivity.this.startActivity(intent);
             }
         }
     }

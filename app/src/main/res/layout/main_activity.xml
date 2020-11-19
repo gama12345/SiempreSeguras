@@ -8,23 +8,38 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:adjustViewBounds="false"
+                app:srcCompat="@drawable/siempreseguras_logo" />
 
             <EditText
                 android:id="@+id/email"
+                style="@style/Widget.AppCompat.Light.AutoCompleteTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="40dp"
+                android:backgroundTint="@color/color_light"
                 android:hint="Email"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                android:textColorHighlight="@color/color_light"
+                android:textColorLink="#FFFFFF" />
 
             <EditText
                 android:id="@+id/contraseña"
@@ -33,16 +48,23 @@
                 android:layout_marginLeft="40dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="40dp"
+                android:backgroundTint="@color/color_light"
                 android:ems="10"
                 android:hint="Contraseña"
                 android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/entrar"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginTop="30dp"
-                android:text="Iniciar sesión" />
+                android:backgroundTint="@color/color_base"
+                android:elevation="5dp"
+                android:paddingStart="40dp"
+                android:paddingEnd="40dp"
+                android:text="Iniciar sesión"
+                android:textColor="#FFFFFF" />
 
             <TextView
                 android:id="@+id/link_recuperarContraseña"
@@ -50,8 +72,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:clickable="true"
-                android:text="¿Olvidaste tu contraseña?"
+                android:text="@string/resetp"
                 android:textAlignment="center"
+                android:textColor="@color/color_light"
                 android:textSize="18sp" />
 
             <TextView
@@ -59,10 +82,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="30dp"
                 android:clickable="true"
-                android:text="¿Aún no tienes cuenta? Registrate"
+                android:text="@string/registro"
                 android:textAlignment="center"
+                android:textAllCaps="false"
+                android:textColor="@color/color_light"
                 android:textSize="18sp" />
 
         </LinearLayout>

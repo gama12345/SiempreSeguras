@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.View;
@@ -35,6 +37,7 @@ public class RecuperarContrasena extends AppCompatActivity {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.recuperarcontrasena_activity);
+        EditText editText = findViewById(R.id.correo_recuperarContraseña);
         configurarBotones();
     }
 

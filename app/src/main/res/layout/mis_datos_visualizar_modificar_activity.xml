@@ -10,9 +10,13 @@
         android:id="@+id/barra_de_herramientas"
         layout="@layout/barra_de_herramientas"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"></include>
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></include>
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -21,102 +25,240 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingTop="15dp">
 
-            <EditText
-                android:id="@+id/editText_nombre_usuario6"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:ems="10"
-                android:hint="Nombre..."
-                android:inputType="textPersonName"
-                android:padding="5dp" />
+                android:layout_gravity="center"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editText_primer_apellido_usuario5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:ems="10"
-                android:hint="Apellido Paterno..."
-                android:inputType="textPersonName"
-                android:padding="5dp" />
+                <ImageView
+                    android:id="@+id/imageView7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="0.99"
+                    android:cropToPadding="false"
+                    app:srcCompat="@drawable/icon_account" />
 
-            <EditText
-                android:id="@+id/editText_segundo_apellido_usuario4"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:ems="10"
-                android:hint="Apellido Materno..."
-                android:inputType="textPersonName"
-                android:padding="5dp" />
+                <EditText
+                    android:id="@+id/editText_nombre_usuario6"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Nombre..."
+                    android:inputType="textPersonName"
+                    android:padding="5dp"
+                    android:theme="@style/EditTextTheme" />
 
-            <EditText
-                android:id="@+id/editText_fecha_nacimiento_usuario3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:ems="10"
-                android:focusable="false"
-                android:hint="Fecha de nacimiento..."
-                android:inputType="textPersonName"
-                android:padding="5dp" />
+            </LinearLayout>
 
-            <Spinner
-                android:id="@+id/spinner_municipio"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp" />
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/editText_celular_usuario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:ems="10"
-                android:hint="Celular..."
-                android:inputType="phone"
-                android:padding="5dp" />
+                <ImageView
+                    android:id="@+id/imageView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="0.7"
+                    app:srcCompat="@drawable/icons_lastname" />
 
-            <EditText
-                android:id="@+id/editText_correo_usuario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:ems="10"
-                android:hint="Correo electrónico..."
-                android:inputType="textPersonName"
-                android:padding="5dp" />
+                <EditText
+                    android:id="@+id/editText_primer_apellido_usuario5"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Apellido Paterno..."
+                    android:inputType="textPersonName"
+                    android:padding="5dp"
+                    android:theme="@style/EditTextTheme" />
 
-            <EditText
-                android:id="@+id/editText_contraseña_usuario2"
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginBottom="10dp"
-                android:ems="10"
-                android:hint="Contraseña..."
-                android:inputType="textPassword"
-                android:padding="5dp" />
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="0.7"
+                    app:srcCompat="@drawable/icons_lastname" />
+
+                <EditText
+                    android:id="@+id/editText_segundo_apellido_usuario4"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Apellido Materno..."
+                    android:inputType="textPersonName"
+                    android:padding="5dp"
+                    android:theme="@style/EditTextTheme" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView10"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="6"
+                    android:adjustViewBounds="false"
+                    app:srcCompat="@drawable/icon_date" />
+
+                <EditText
+                    android:id="@+id/editText_fecha_nacimiento_usuario3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:focusable="false"
+                    android:hint="Fecha de nacimiento..."
+                    android:inputType="textPersonName"
+                    android:padding="5dp"
+                    android:theme="@style/EditTextTheme" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="0.99"
+                    app:srcCompat="@drawable/icon_city" />
+
+                <Spinner
+                    android:id="@+id/spinner_municipio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:padding="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/icon_cellphone" />
+
+                <EditText
+                    android:id="@+id/editText_celular_usuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Celular..."
+                    android:inputType="phone"
+                    android:padding="5dp"
+                    android:theme="@style/EditTextTheme" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/icon_email" />
+
+                <EditText
+                    android:id="@+id/editText_correo_usuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Correo electrónico..."
+                    android:inputType="textPersonName"
+                    android:padding="5dp"
+                    android:theme="@style/EditTextTheme" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="15dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/imageView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@drawable/icon_password" />
+
+                <EditText
+                    android:id="@+id/editText_contraseña_usuario2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_weight="1"
+                    android:ems="10"
+                    android:hint="Contraseña..."
+                    android:inputType="textPassword"
+                    android:padding="5dp"
+                    android:theme="@style/EditTextTheme" />
+
+            </LinearLayout>
 
             <Button
                 android:id="@+id/button_modificar_datos"
@@ -124,7 +266,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="60dp"
                 android:text="Guardar cambios" />
         </LinearLayout>
     </ScrollView>
