@@ -22,6 +22,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Camera;
 import android.graphics.drawable.BitmapDrawable;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.hardware.camera2.CameraDevice;
 import android.location.Address;
 import android.location.Geocoder;
@@ -32,6 +36,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.telephony.SmsManager;
@@ -67,23 +72,46 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
-public class MenuPrincipalActivity extends AppCompatActivity implements LocationListener {
+public class MenuPrincipalActivity extends AppCompatActivity implements LocationListener{
     private int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 100;
     private static final int PERMISSIONS_REQUEST_SEND_SMS = 200;
     private static final int PERMISSIONS_REQUEST_CAMERA = 300;
     private static final int PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 400;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    static MenuPrincipalActivity instance;
     Activity miActivity;
     LocationListener escucha = this;
     ImageButton buttonPanico;
     String currentPhotoPath, smsMessage;
 
+
+    /*private SensorManager mSensorManager;
+    private float mAccel;
+    private float mAccelCurrent;
+    private float mAccelLast;
+    private boolean msgE = false;
+
+     */
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_principal_activity);
+/*
+        mSensorManager = (SensorManager) getSystemService(this.SENSOR_SERVICE);
+        Objects.requireNonNull(mSensorManager).registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+        mAccel = 10f;
+        mAccelCurrent = SensorManager.GRAVITY_EARTH;
+        mAccelLast = SensorManager.GRAVITY_EARTH;
+
+ */
+
         miActivity = this;
+        instance = this;
         colocarBarra();
         Button botonMisDatos = findViewById(R.id.button_misdatos);
         botonMisDatos.setOnClickListener(new View.OnClickListener(){
@@ -169,6 +197,9 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
             //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
         }
+
+        Intent intent = new Intent(MenuPrincipalActivity.this, ShakeService.class);
+        MenuPrincipalActivity.this.startService(intent);
     }
 
     public void colocarBarra(){
@@ -177,7 +208,48 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
         getSupportActionBar().setTitle("Menú Principal");
     }
 
-    private void sendCurrentLocation(){
+    public static MenuPrincipalActivity getInstance(){
+        return instance;
+    }
+    /*
+    private final SensorEventListener mSensorListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+            mAccelLast = mAccelCurrent;
+            mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z * z));
+            float delta = mAccelCurrent - mAccelLast;
+            mAccel = mAccel * 0.9f + delta;
+            if (mAccel > 30 && !msgE) {
+                sendCurrentLocation();
+                msgE = true;
+            }
+            if (mAccel < 2 && msgE) {
+                msgE = false;
+
+            }
+        }
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        }
+    };
+    @Override
+    protected void onResume() {
+        mSensorManager.registerListener(mSensorListener, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_NORMAL);
+        super.onResume();
+    }
+    @Override
+    protected void onPause() {
+        mSensorManager.unregisterListener(mSensorListener);
+        super.onPause();
+    }
+
+     */
+
+    public void sendCurrentLocation(){
         if(isGPSEnabled()){
             Geocoder geo = new Geocoder(this, Locale.getDefault());
             LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
@@ -210,8 +282,11 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                 MainActivity.usuarioActual.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        smsMessage = task.getResult().get("nombre") + " " + task.getResult().get("primer_apellido") + " " + task.getResult().get("segundo_apellido") + " ha activado una alerta\n" +
-                                "Dirección: " + direccion + "\nLatitud: " + latitud + "\nLongitud: " + longitud + "\nHora: " + hora + "\nVer en mapa: " + "https://www.google.com/maps/search/?api=1&query=" + latitud + "," + longitud;
+                        smsMessage = task.getResult().get("nombre") + " " + task.getResult().get("primer_apellido") + " activó una alerta\n" +
+                                "Hora: "+ hora +"\nLat: " + latitud + "\nLong: " + longitud + "\nEn: "+ direccion;
+                        if(smsMessage.length() > 160){
+                            smsMessage = smsMessage.substring(0, 159);
+                        }
                         if(task.getResult().get("fotoAlertas").toString().equals("true")){
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                                 requestPermissions(new String[]{Manifest.permission.CAMERA}, PERMISSIONS_REQUEST_CAMERA);

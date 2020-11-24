@@ -22,6 +22,17 @@
             android:background="@color/white"
             android:orientation="horizontal">
 
+            <ToggleButton
+                android:id="@+id/toggleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="#CDB2FF"
+                android:checked="false"
+                android:minWidth="48dp"
+                android:textOff="No"
+                android:textOn="Si" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -78,16 +89,6 @@
                 </LinearLayout>
 
             </LinearLayout>
-
-            <ToggleButton
-                android:id="@+id/toggleButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:checked="false"
-                android:minWidth="48dp"
-                android:textOff="No"
-                android:textOn="Si" />
 
         </LinearLayout>
 

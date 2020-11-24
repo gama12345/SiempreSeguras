@@ -44,12 +44,11 @@ public class AdaptadorAlertas extends RecyclerView.Adapter<AdaptadorAlertas.Adap
 
     @Override
     public void onBindViewHolder(@NonNull final AdaptadorViewHolder holder, int position) {
-        String[] seg3 = alertas.get(position).getMensaje().split("ha activado");
+        String[] seg3 = alertas.get(position).getMensaje().split(" activó una alerta");
         holder.nombreUsuaria.setText("Emitida por: "+seg3[0]);
-        String[] seg = alertas.get(position).getMensaje().split("Dirección: ");
-        String[] dir = seg[1].split("Latitud:");
-        holder.direccionUsuaria.setText("Última dirección: "+dir[0]);
-        String[] seg2 = alertas.get(position).getMensaje().split("Ver en mapa: ");
+        String[] seg = alertas.get(position).getMensaje().split("En: ");
+        holder.direccionUsuaria.setText("Última dirección: "+seg[1]);
+        String[] seg2 = alertas.get(position).getMensaje().split("Lat: ");
         String[] hora = seg2[0].split("Hora: ");
         holder.horaUsuaria.setText("Hora: "+hora[1]);
         if (!alertas.get(position).getImagen().equals("")){

@@ -44,7 +44,7 @@
                         android:id="@+id/textView3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Alertas"
+                        android:text="Foto"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -82,7 +82,7 @@
                         android:id="@+id/textView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Notificaciones"
+                        android:text="Registrarse como ayuda"
                         android:textSize="16sp"
                         android:textStyle="bold" />
 
@@ -90,7 +90,7 @@
                         android:id="@+id/textView2"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Recibir alertas emitidas por usuarios que me seleccionen como contacto de emergencia" />
+                        android:text="Recibir alertas emitidas por usuarios que me seleccionen como contacto de ayuda" />
                 </LinearLayout>
 
                 <Switch
