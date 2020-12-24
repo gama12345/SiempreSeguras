@@ -13,8 +13,12 @@ import retrofit2.Response;
 import android.Manifest;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -33,6 +37,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -45,6 +50,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -84,7 +90,11 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
     Activity miActivity;
     LocationListener escucha = this;
     ImageButton buttonPanico;
+    Button botonMisContactos, botonAlertas, botonMisDatos;
+    TextView textView6;
     String currentPhotoPath, smsMessage;
+    boolean cancelado = false;
+    int segundos = 10;
 
 
     /*private SensorManager mSensorManager;
@@ -113,7 +123,8 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
         miActivity = this;
         instance = this;
         colocarBarra();
-        Button botonMisDatos = findViewById(R.id.button_misdatos);
+        textView6 = findViewById(R.id.textView6);
+        botonMisDatos = findViewById(R.id.button_misdatos);
         botonMisDatos.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -121,7 +132,7 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                 MenuPrincipalActivity.this.startActivity(nuevaIntent);
             }
         });
-        Button botonAlertas = findViewById(R.id.button_misalertas);
+        botonAlertas = findViewById(R.id.button_misalertas);
         botonAlertas.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -129,7 +140,7 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                 MenuPrincipalActivity.this.startActivity(nuevaIntent);
             }
         });
-        Button botonMisContactos = findViewById(R.id.button_miscontactos);
+        botonMisContactos = findViewById(R.id.button_miscontactos);
         botonMisContactos.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -141,7 +152,13 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
         buttonPanico.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                sendCurrentLocation();
+                buttonPanico.setVisibility(View.GONE);
+                botonAlertas.setVisibility(View.GONE);
+                botonMisContactos.setVisibility(View.GONE);
+                botonMisDatos.setVisibility(View.GONE);
+                textView6.setText("La alerta se enviará en 10 segundos...");
+                ejecutar();
+                //sendCurrentLocation();
                 return true;
             }
         });
@@ -285,7 +302,7 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                         smsMessage = task.getResult().get("nombre") + " " + task.getResult().get("primer_apellido") + " activó una alerta\n" +
                                 "Hora: "+ hora +"\nLat: " + latitud + "\nLong: " + longitud + "\nEn: "+ direccion;
                         if(smsMessage.length() > 160){
-                            smsMessage = smsMessage.substring(0, 159);
+                            smsMessage = smsMessage.substring(0, 158);
                         }
                         if(task.getResult().get("fotoAlertas").toString().equals("true")){
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -296,27 +313,39 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                                     requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
                                     //After this point you wait for callback in onRequestPermissionsResult(int, String[], int[]) overriden method
                                 }else {
-                                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                                        File photoFile = null;
-                                        try {
-                                            photoFile = createImageFile();
-                                        } catch (IOException ex) {
-                                            // Error occurred while creating the File
+
+                                    HelperSQLite helper = new HelperSQLite(MenuPrincipalActivity.this, "siempreseguras", null, 1);
+                                    SQLiteDatabase bd = helper.getWritableDatabase();
+                                    String[] datos = {"nombre", "telefono"};
+                                    Cursor consulta = bd.query("miscontactos", datos,
+                                            null, null, null, null, null);
+
+                                    if (consulta.getCount() > 0) {
+                                        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                                        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                                            File photoFile = null;
+                                            try {
+                                                photoFile = createImageFile();
+                                            } catch (IOException ex) {
+                                                // Error occurred while creating the File
+                                            }
+                                            // Continue only if the File was successfully created
+                                            if (photoFile != null) {
+                                                Uri photoURI = FileProvider.getUriForFile(miActivity,
+                                                        "com.example.siempresegurasagcvim.fileprovider",
+                                                        photoFile);
+                                                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                                                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+                                            }
                                         }
-                                        // Continue only if the File was successfully created
-                                        if (photoFile != null) {
-                                            Uri photoURI = FileProvider.getUriForFile(miActivity,
-                                                    "com.example.siempresegurasagcvim.fileprovider",
-                                                    photoFile);
-                                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                                            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                                        }
+                                    }else{
+                                        Snackbar.make(buttonPanico, "No tienes contactos registrados", Snackbar.LENGTH_LONG)
+                                                .setAction("Mensaje", null).show();
                                     }
                                 }
                             }
                         }else {
-                            String destinationAddress;
+                            String destinationAddress = "";
                             String scAddress = null;
                             PendingIntent sentIntent = null, deliveryIntent = null;
                             HelperSQLite helper = new HelperSQLite(MenuPrincipalActivity.this, "siempreseguras", null, 1);
@@ -326,19 +355,24 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                                     null, null, null, null, null);
                             ArrayList<String> numeros = new ArrayList<>();
                             ArrayList<String> numeros2 = new ArrayList<>();
+                            SmsManager smsManager = SmsManager.getDefault();
                             while (consulta.moveToNext()) {
                                 numeros.add(consulta.getString(1));
                                 numeros2.add(consulta.getString(1));
                                 destinationAddress = consulta.getString(1);
-                                SmsManager smsManager = SmsManager.getDefault();
-                                smsManager.sendTextMessage
-                                        (destinationAddress, scAddress, smsMessage,
-                                                sentIntent, deliveryIntent);
+                                sendSMS(destinationAddress, smsMessage);
                             }
-                            enviarNotificaciones(numeros2);
-                            guardarAlertas(numeros, smsMessage, MainActivity.usuarioActualEmail,"");
-                            Snackbar.make(buttonPanico, "Alerta emitida", Snackbar.LENGTH_LONG)
-                                    .setAction("Mensaje", null).show();
+                            //smsManager.sendTextMessage(destinationAddress, null, smsMessage,null, null);
+                            bd.close();
+                            if(numeros2.size() > 0) {
+                                enviarNotificaciones(numeros2);
+                                guardarAlertas(numeros, smsMessage, MainActivity.usuarioActualEmail, "");
+                                Snackbar.make(buttonPanico, "Alerta emitida", Snackbar.LENGTH_LONG)
+                                        .setAction("Mensaje", null).show();
+                            }else{
+                                Snackbar.make(buttonPanico, "No tienes contactos registrados", Snackbar.LENGTH_LONG)
+                                        .setAction("Mensaje", null).show();
+                            }
                         }
 
                     }
@@ -348,6 +382,72 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
             Snackbar.make(buttonPanico, "Tu GPS esta desactivado, activalo para poder enviar alertas", Snackbar.LENGTH_LONG)
                     .setAction("Error", null).show();
         }
+    }
+
+    private void sendSMS(String phoneNumber, String message) {
+        String SENT = "SMS_SENT";
+        String DELIVERED = "SMS_DELIVERED";
+
+        PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(
+                SENT), 0);
+
+        PendingIntent deliveredPI = PendingIntent.getBroadcast(this, 0,
+                new Intent(DELIVERED), 0);
+
+        // ---when the SMS has been sent---
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode()) {
+                    case Activity.RESULT_OK:
+                        ContentValues values = new ContentValues();
+                        /*for (int i = 0; i < MobNumber.size() - 1; i++) {
+                            values.put("address", MobNumber.get(i).toString());// txtPhoneNo.getText().toString());
+                            values.put("body", MessageText.getText().toString());
+                        }
+                        getContentResolver().insert(
+                                Uri.parse("content://sms/sent"), values);*/
+                        //Toast.makeText(getBaseContext(), "SMS sent", Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        Toast.makeText(getBaseContext(), "Generic failure",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Toast.makeText(getBaseContext(), "No service",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        Toast.makeText(getBaseContext(), "Null PDU",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        Toast.makeText(getBaseContext(), "Radio off",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        }, new IntentFilter(SENT));
+
+        // ---when the SMS has been delivered---
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context arg0, Intent arg1) {
+                switch (getResultCode()) {
+                    case Activity.RESULT_OK:
+                        Toast.makeText(getBaseContext(), "SMS delivered",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Toast.makeText(getBaseContext(), "SMS not delivered",
+                                Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        }, new IntentFilter(DELIVERED));
+
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendMultipartTextMessage(phoneNumber, null, sms.divideMessage(message), null, null);
     }
 
     public void guardarAlertas(ArrayList<String> numContactos, String msg, String usuaria, String img){
@@ -373,6 +473,7 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (!task.getResult().isEmpty()) {
                         if (task.getResult().getDocuments().get(0).get("ayudante").toString().equals("true")) {
+
                             AdapterNotifications adapterRestAPI = new AdapterNotifications();
                             PuntosConexion endpoints = adapterRestAPI.startAdapter();
                             Call<SolicitudNotificacion> usuarioResponseCall = endpoints.enviarNotificacion(task.getResult().getDocuments().get(0).get("token").toString());
@@ -389,6 +490,7 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
 
                                 }
                             });
+
                         }
                     }
                     numContactosT.remove(0);
@@ -544,6 +646,48 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
                             .setAction("Mensaje", null).show();
                 }
             });
+        }
+    }
+
+
+
+
+
+
+
+    public void ejecutar(){
+        Tiempo a = new Tiempo();
+        a.execute();
+    }
+    public void hilo() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) { e.printStackTrace(); }
+    }
+
+    public class Tiempo extends AsyncTask<Void,Integer,Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            hilo();
+            segundos--;
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+            //Aqui se actualiza la posición
+            if(!cancelado && segundos > 0){
+                textView6.setText("La alerta se enviará en "+segundos+" segundos...");
+                ejecutar();
+            }else{
+                segundos = 10;
+                buttonPanico.setVisibility(View.VISIBLE);
+                botonAlertas.setVisibility(View.VISIBLE);
+                botonMisContactos.setVisibility(View.VISIBLE);
+                botonMisDatos.setVisibility(View.VISIBLE);
+                textView6.setText("Si te encuentras en peligro manten presionado el icono de alerta");
+            }
         }
     }
 
