@@ -64,7 +64,18 @@
                 android:layout_marginLeft="40dp"
                 android:layout_marginRight="40dp"
                 android:layout_marginBottom="10dp"
-                android:text="Mis alertas"
+                android:text="Alertas recibidas"
+                android:textColor="#FFFFFF"
+                app:iconTint="#FFFFFF" />
+
+            <Button
+                android:id="@+id/button_misalertasemitidas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="10dp"
+                android:text="Alertas emitidas"
                 android:textColor="#FFFFFF"
                 app:iconTint="#FFFFFF" />
 
@@ -77,6 +88,18 @@
                 android:layout_marginBottom="50dp"
                 android:text="Mis Contactos"
                 android:textColor="#FFFFFF"
+                app:iconTint="#FFFFFF" />
+
+            <Button
+                android:id="@+id/button_cancelaralerta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_marginBottom="10dp"
+                android:text="Cancelar"
+                android:textColor="#FFFFFF"
+                android:visibility="gone"
                 app:iconTint="#FFFFFF" />
 
         </LinearLayout>

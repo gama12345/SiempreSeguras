@@ -28,6 +28,8 @@ public class ConfiguracionActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 Switch switchN = findViewById(R.id.switchNotificaciones);
                 switchN.setChecked(Boolean.valueOf(task.getResult().get("ayudante").toString()));
+                Switch switchCR = findViewById(R.id.switchCuentaRegresiva);
+                switchCR.setChecked(Boolean.valueOf(task.getResult().get("cuentaRegresiva").toString()));
                 Switch switchA = findViewById(R.id.switchAlertas);
                 switchA.setChecked(Boolean.valueOf(task.getResult().get("fotoAlertas").toString()));
             }
@@ -37,8 +39,9 @@ public class ConfiguracionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Switch switchN = findViewById(R.id.switchNotificaciones);
+                Switch switchCR = findViewById(R.id.switchCuentaRegresiva);
                 Switch switchA = findViewById(R.id.switchAlertas);
-                MainActivity.usuarioActual.update("ayudante", switchN.isChecked(), "fotoAlertas", switchA.isChecked());
+                MainActivity.usuarioActual.update("ayudante", switchN.isChecked(), "fotoAlertas", switchA.isChecked(), "cuentaRegresiva", switchCR.isChecked());
                 Toast.makeText(view.getContext(), "Se han guardado tus cambios", Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(ConfiguracionActivity.this, MenuPrincipalActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -50,6 +50,7 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,7 +91,7 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
     Activity miActivity;
     LocationListener escucha = this;
     ImageButton buttonPanico;
-    Button botonMisContactos, botonAlertas, botonMisDatos;
+    Button botonMisContactos, botonAlertas, botonMisDatos, botonAlertasActivas, botonCancelarAlerta;
     TextView textView6;
     String currentPhotoPath, smsMessage;
     boolean cancelado = false;
@@ -124,6 +125,14 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
         instance = this;
         colocarBarra();
         textView6 = findViewById(R.id.textView6);
+        botonAlertasActivas = findViewById(R.id.button_misalertasemitidas);
+        botonCancelarAlerta = findViewById(R.id.button_cancelaralerta);
+        botonCancelarAlerta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cancelado = true;
+            }
+        });
         botonMisDatos = findViewById(R.id.button_misdatos);
         botonMisDatos.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -152,13 +161,24 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
         buttonPanico.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                buttonPanico.setVisibility(View.GONE);
-                botonAlertas.setVisibility(View.GONE);
-                botonMisContactos.setVisibility(View.GONE);
-                botonMisDatos.setVisibility(View.GONE);
-                textView6.setText("La alerta se enviará en 10 segundos...");
-                ejecutar();
-                //sendCurrentLocation();
+                MainActivity.usuarioActual.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if(task.getResult().get("cuentaRegresiva").toString().equals("true")){
+                            buttonPanico.setVisibility(View.GONE);
+                            botonAlertas.setVisibility(View.GONE);
+                            botonMisContactos.setVisibility(View.GONE);
+                            botonMisDatos.setVisibility(View.GONE);
+                            botonAlertasActivas.setVisibility(View.GONE);
+                            botonCancelarAlerta.setVisibility(View.VISIBLE);
+                            textView6.setText("La alerta se enviará en 10 segundos...");
+                            ejecutar();
+                        }else{
+                            sendCurrentLocation();
+                        }
+                    }
+                });
+                //
                 return true;
             }
         });
@@ -456,6 +476,7 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
         objAlerta.put("usuaria", usuaria);
         objAlerta.put("contacto", numContactos.get(0));
         objAlerta.put("imagen", img);
+        objAlerta.put("estado", "activa");
         numContactos.remove(0);
         FirebaseFirestore.getInstance().collection("alertas").add(objAlerta).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
@@ -680,13 +701,28 @@ public class MenuPrincipalActivity extends AppCompatActivity implements Location
             if(!cancelado && segundos > 0){
                 textView6.setText("La alerta se enviará en "+segundos+" segundos...");
                 ejecutar();
+            }else if(cancelado){
+                segundos = 10;
+                buttonPanico.setVisibility(View.VISIBLE);
+                botonAlertas.setVisibility(View.VISIBLE);
+                botonMisContactos.setVisibility(View.VISIBLE);
+                botonMisDatos.setVisibility(View.VISIBLE);
+                botonAlertasActivas.setVisibility(View.VISIBLE);
+                botonCancelarAlerta.setVisibility(View.GONE);
+                cancelado = false;
+                textView6.setText("Si te encuentras en peligro manten presionado el icono de alerta");
+                Toast.makeText(miActivity, "Alerta cancelada", Toast.LENGTH_SHORT).show();
             }else{
                 segundos = 10;
                 buttonPanico.setVisibility(View.VISIBLE);
                 botonAlertas.setVisibility(View.VISIBLE);
                 botonMisContactos.setVisibility(View.VISIBLE);
                 botonMisDatos.setVisibility(View.VISIBLE);
+                botonAlertasActivas.setVisibility(View.VISIBLE);
+                botonCancelarAlerta.setVisibility(View.GONE);
+                cancelado = false;
                 textView6.setText("Si te encuentras en peligro manten presionado el icono de alerta");
+                sendCurrentLocation();
             }
         }
     }

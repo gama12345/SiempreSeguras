@@ -1,16 +1,17 @@
 package com.example.siempresegurasagcvim;
 
 public class Alerta {
-    String contacto, imagen, mensaje, usuaria;
+    String contacto, imagen, mensaje, usuaria, estado;
 
     public Alerta() {
     }
 
-    public Alerta(String contacto, String imagen, String mensaje, String usuaria) {
+    public Alerta(String contacto, String imagen, String mensaje, String usuaria, String estado) {
         this.contacto = contacto;
         this.imagen = imagen;
         this.mensaje = mensaje;
         this.usuaria = usuaria;
+        this.estado = estado;
     }
 
     public String getContacto() {
@@ -43,5 +44,13 @@ public class Alerta {
 
     public void setUsuaria(String usuaria) {
         this.usuaria = usuaria;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }

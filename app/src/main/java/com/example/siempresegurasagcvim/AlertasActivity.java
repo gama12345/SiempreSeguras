@@ -78,11 +78,11 @@ public class AlertasActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 String tel = task.getResult().get("telefono").toString();
-                FirebaseFirestore.getInstance().collection("alertas").whereEqualTo("contacto", tel).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                FirebaseFirestore.getInstance().collection("alertas").whereEqualTo("contacto", tel).orderBy("estado").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         for (DocumentSnapshot document : task.getResult()) {
-                            alertas.add(new Alerta(document.get("contacto").toString(), document.get("imagen").toString(), document.get("mensaje").toString(), document.get("usuaria").toString()));
+                            alertas.add(new Alerta(document.get("contacto").toString(), document.get("imagen").toString(), document.get("mensaje").toString(), document.get("usuaria").toString(), document.get("estado").toString()));
                         }
                         AdaptadorAlertas adaptador = new AdaptadorAlertas(alertas, miActivity);
                         recyclerView.setAdapter(adaptador);

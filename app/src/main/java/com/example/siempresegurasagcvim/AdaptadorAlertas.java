@@ -51,6 +51,7 @@ public class AdaptadorAlertas extends RecyclerView.Adapter<AdaptadorAlertas.Adap
         String[] seg2 = alertas.get(position).getMensaje().split("Lat: ");
         String[] hora = seg2[0].split("Hora: ");
         holder.horaUsuaria.setText("Hora: "+hora[1]);
+        holder.edo.setText("Estado: "+alertas.get(position).getEstado());
         if (!alertas.get(position).getImagen().equals("")){
 
             FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -85,11 +86,12 @@ public class AdaptadorAlertas extends RecyclerView.Adapter<AdaptadorAlertas.Adap
     }
 
     public class AdaptadorViewHolder extends RecyclerView.ViewHolder{
-        TextView nombreUsuaria, direccionUsuaria, horaUsuaria;
+        TextView nombreUsuaria, direccionUsuaria, horaUsuaria, edo;
         ImageView imgUsuaria;
 
         public AdaptadorViewHolder(@NonNull View itemView) {
             super(itemView);
+            edo = itemView.findViewById(R.id.estadoAlerta);
             nombreUsuaria = itemView.findViewById(R.id.nombreUsuaria);
             direccionUsuaria = itemView.findViewById(R.id.direccionUsuaria);
             horaUsuaria = itemView.findViewById(R.id.horaUsuaria);
